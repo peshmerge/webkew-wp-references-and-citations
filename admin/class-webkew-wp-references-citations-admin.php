@@ -109,6 +109,7 @@ class WebKew_WP_References_Citations_Admin
                 esc_html($post_type->label) . "</label><br>";
         }
     }
+
     public function wwrc_delete_data_callback()
     {
         $options = get_option('webkew_wp_references_citations_options');
@@ -155,9 +156,9 @@ class WebKew_WP_References_Citations_Admin
         $references = get_post_meta($post->ID, 'webkew_wp_references_field', true);
         wp_nonce_field('webkew_references_meta_box', 'webkew_references_meta_box_nonce');
         ?>
+        <p>Enter BibTeX references here, one per entry.</p>
         <textarea name="webkew_wp_references_field" id="webkew_wp_references_field" rows="10" style="width: 100%;">
             <?php echo esc_textarea($references); ?></textarea>
-        <p>Enter BibTeX references here, one per entry.</p>
         <?php
     }
 
