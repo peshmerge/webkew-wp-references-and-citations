@@ -17,7 +17,7 @@ class WebKew_WP_References_Citations_Public
 
     public function wwrc_enqueue_scripts()
     {
-        $options = get_option('webkew_wp_references_options');
+        $options = get_option('webkew_wp_references_citations_options');
 
         $this->bibliography_style = isset($options['wwrc_webkew_bibliography_style']) ? $options['wwrc_webkew_bibliography_style'] : 'apa';
         $this->citation_style = isset($options['wwrc_webkew_citation_style']) ? $options['wwrc_webkew_citation_style'] : 'author_year';
@@ -79,7 +79,7 @@ class WebKew_WP_References_Citations_Public
                 $content = str_replace($match[0], "(" . $replacement . ")", $content);
             } elseif (count(explode(',', $match[1])) > 1) {
                 $replacement = [];
-                $citations = explode(',', $match[1]);
+                $citations = array_map('trim', explode(',', $match[1]));
                 foreach ($citations as $second_index => $citation) {
                     $citations_count++;
                     $replacement[] = $this->wwrc_format_citation($citation, $references, $second_index + $citations_count);

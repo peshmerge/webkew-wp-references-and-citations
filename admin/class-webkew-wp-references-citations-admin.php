@@ -157,9 +157,7 @@ class WebKew_WP_References_Citations_Admin
         wp_nonce_field('webkew_references_meta_box', 'webkew_references_meta_box_nonce');
         ?>
         <p>Enter BibTeX references here, one per entry.</p>
-        <textarea name="webkew_wp_references_field" id="webkew_wp_references_field" rows="10" style="width: 100%;">
-            <?php echo esc_textarea($references); ?></textarea>
-        <?php
+        <textarea name="webkew_wp_references_field" id="webkew_wp_references_field" rows="10" style="width: 100%;"><?php echo esc_textarea($references); ?></textarea><?php
     }
 
     public function wwrc_save_references_meta_box($post_id)
