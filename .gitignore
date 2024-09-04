@@ -1,0 +1,4 @@
+# ignore vendor folder
+node_modules
+
+.idea
