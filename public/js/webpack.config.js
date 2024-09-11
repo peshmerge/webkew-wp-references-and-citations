@@ -6,6 +6,9 @@ module.exports = {
         filename: 'webkew-wp-references-citations.js',
         path: path.resolve(__dirname, 'dist'),
     },
+    optimization: {
+        minimize: true
+    },
     mode: 'development',
     watch: true, // Enables watch mode in the config
 };
