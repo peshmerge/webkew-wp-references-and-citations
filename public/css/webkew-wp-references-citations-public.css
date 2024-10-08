@@ -1,0 +1,19 @@
+.webkewrc-bibliography {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+
+.webkewrc-bibliography h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
+.webkew_highlight {
+    background-color: #7bc4ff;
+}
+
+.csl-entry {
+    margin-bottom: 0.3em;
+    font-size: 0.9em;
+    padding: 0.3em;
+}

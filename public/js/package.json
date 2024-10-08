@@ -1,8 +1,8 @@
 {
-  "name": "webkew-wp-references-citations",
+  "name": "webkew-wp-references-and-citations",
   "version": "1.0.0",
   "description": "Generate bibliography for citations in a WordPress post using Citation-JS ",
-  "main": "src/webkew-wp-references-public.js",
+  "main": "src/webkew-wp-references-citations-public.js",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development",

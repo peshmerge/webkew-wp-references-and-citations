@@ -26,7 +26,7 @@ The plugin has a couple of options:
 4. Delete data on uninstall: decide to delete all stored references on plugin uninstall.
 
 == Installation ==
-Install the plugin from and start using it!
+Install the plugin from WordPress.org and start using it!
 
 == Screenshots ==
 
