@@ -2,9 +2,9 @@
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 class Webkewrc_References_Citations_Admin
 {
-    const  array WEBKEWRC_CITATION_STYLES = ['author_year', 'Author', 'numerical'];
-    const  array WEBKEWRC_CITATION_STYLES_LABELS = ['(Author Year) Author year', '(Author) Author', '(NUMBER) Numerical'];
-    const  array WEBKEWRC_BIBLIOGRAPHY_STYLES = ['apa', 'vancouver', 'harvard'];
+    const  WEBKEWRC_CITATION_STYLES = ['author_year', 'Author', 'numerical'];
+    const  WEBKEWRC_CITATION_STYLES_LABELS = ['(Author Year) Author year', '(Author) Author', '(NUMBER) Numerical'];
+    const  WEBKEWRC_BIBLIOGRAPHY_STYLES = ['apa', 'vancouver', 'harvard'];
 
     public function webkewrc_add_plugin_menu()
     {
