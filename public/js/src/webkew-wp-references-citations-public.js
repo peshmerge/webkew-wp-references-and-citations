@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     // Function to process references for a specific post
     function processReferences(postID) {
         const Cite = require('citation-js');
@@ -48,16 +47,24 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let postID in window.webkewReferencesData) {
         processReferences(postID);
     }
-
     // Add this global click handler for citations
     jQuery(document).on('click', '.webkew-citation', function (event) {
         event.preventDefault();
         var key = jQuery(this).data('key');
         var bib_item_element = jQuery('#' + key);
+
+
+        // Scroll to the element with smooth animation
+        jQuery('html, body').animate({
+            scrollTop: bib_item_element.offset().top
+        }, 500); // 500 is the duration of the scroll (in milliseconds)
+
+
         jQuery('.csl-entry').removeClass('webkew_highlight');
         bib_item_element.addClass('webkew_highlight');
         setTimeout(function () {
             bib_item_element.removeClass('webkew_highlight');
         }, 5000);
     });
+
 });

@@ -5,7 +5,7 @@ Tags: references, citations, APA, bibliography, bibtex
 Donate link: https://buymeacoffee.com/peshmerge
 Requires at least: 5.5
 Tested up to: 6.6
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -35,6 +35,11 @@ Install the plugin from WordPress.org and start using it!
 3. On the front-end, the citations in the text and generated bibliography.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed: `Delete data on uninstall` option was not saving the user preference.
+* Fixed: on click the citation key will lead to the reference entry in the bibliography.
+
 
 = 1.0.0 =
 * Plugin released.

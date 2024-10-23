@@ -5,8 +5,14 @@ require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-webkewrc-referenc
 
 class Webkewrc_References_Citations_Public
 {
+    /**
+     * @var array
+     */
     private $used_references;
 
+    /**
+     * @var array
+     */
     private $references;
 
     private $bibliography_style = Webkewrc_References_Citations_Admin::WEBKEWRC_BIBLIOGRAPHY_STYLES[0];
@@ -38,20 +44,12 @@ class Webkewrc_References_Citations_Public
                 array(),
                 '1.0'
             );
-            wp_enqueue_script(
-                'webkew-wp-references-citations-public',
-                WEBKEWRC_REFERENCES_URL . 'public/js/dist/webkew-wp-references-citations-public.js',
-                array('jquery'),
-                '1.0',
-                true  // Load in footer
-            );
-
-            $this->references = wp_kses_post(get_post_meta($post_id, 'webkewrc_wp_references_field', true));
         }
     }
 
     public function webkewrc_process_citations_and_add_bibliography($content)
     {
+        $this->references = wp_kses_post(get_post_meta(get_the_ID(), 'webkewrc_wp_references_field', true));
         if (!is_singular() || empty($this->references)) return $content;
 
         global $post;
@@ -60,8 +58,9 @@ class Webkewrc_References_Citations_Public
         $processed_content = $this->webkewrc_replace_citations($content);
 
         // Add a placeholder for the bibliography
-        $processed_content .= '<div id="webkew-wp-references-bibliography_' . esc_attr($post->ID) . '" class="webkewrc-bibliography"> <h2 class="webkewrc-bibliography_title">' . esc_html__('Bibliography', 'webkew-wp-references-and-citations') . '</h2></div>';
-
+        $processed_content .= '<div id="webkew-wp-references-bibliography_' . esc_attr($post->ID)
+            . '" class="webkewrc-bibliography"> <h2 class="webkewrc-bibliography_title">'
+            . esc_html__('Bibliography', 'webkew-wp-references-and-citations') . '</h2></div>';
 
         $data = array(
             'references' => $this->references,
@@ -69,16 +68,34 @@ class Webkewrc_References_Citations_Public
             'bibliographyStyle' => $this->bibliography_style,
             'postID' => $post->ID,
         );
-
         wp_add_inline_script('webkew-wp-references-citations-public',
             'window.webkewReferencesData = window.webkewReferencesData || {}; ' . "\n" .
-            'window.webkewReferencesData[' . esc_js($post->ID) . '] = ' . wp_json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';',
+            'window.webkewReferencesData[' . esc_js($post->ID) . '] = '
+            . wp_json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';',
             'before'
+        );
+
+        wp_enqueue_script(
+            'webkew-wp-references-citations-public',
+            WEBKEWRC_REFERENCES_URL . 'public/js/dist/webkew-wp-references-citations-public.js',
+            array('jquery'),
+            '1.0',
+            true  // Load in footer
         );
 
         return $processed_content;
     }
 
+
+    /**
+     * This function searches the content of the loaded (custom) post / page for keywords \cite{KEY}. In addition,it
+     * decides whether we are dealing with a single or multi-author citation.
+     * Each found instance is added to the list used_references which is used later to verify whether the used citations
+     * have corresponding bibtex entries in the webkewrc_wp_references_field that belongs to the current (custom) post / page
+     *
+     * @param $content
+     * @return string
+     */
     private function webkewrc_replace_citations($content)
     {
         preg_match_all('/\\\\cite\{([^}]+)\}/', $content, $matches, PREG_SET_ORDER);
@@ -104,6 +121,18 @@ class Webkewrc_References_Citations_Public
         return $content;
     }
 
+    /**
+     * It checks whether each given found citation in the content has corresponding bibtex entry and try to extract
+     * entry_key, author(s) name(s), and the publication year!
+     * Each found instance will be replaced with the corresponding citation style as defined in the settings of the plugin.
+     *
+     * If the passed instance is not found within the list of references of the current (custom) post/page, the function
+     * will return the citation as is \cite{KEY}.
+     *
+     * @param $key
+     * @param $citations_count
+     * @return string
+     */
     private function webkewrc_format_citation($key, $citations_count)
     {
         if (preg_match(
