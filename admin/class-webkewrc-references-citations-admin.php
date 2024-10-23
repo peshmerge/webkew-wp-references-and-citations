@@ -144,9 +144,8 @@ class Webkewrc_References_Citations_Admin
     public function webkewrc_delete_data_callback()
     {
         $options = get_option('webkewrc_references_citations_options');
-        $checked = isset($options['webkewrc_delete_data_on_uninstall']) ? 'checked' : '';
-        echo "<label><input type='checkbox' name='webkewrc_references_citations_options[webkewrc_delete_data_on_uninstall]' value='1'" .
-            esc_attr($checked) . ">" . esc_html__('Delete all plugin data when uninstalling', 'webkew-wp-references-and-citations') . "</label>";
+        echo "<label><input type='checkbox' name='webkewrc_references_citations_options[webkewrc_delete_data_on_uninstall]' value='1' '" .
+            checked(1, $options['webkewrc_delete_data_on_uninstall'], false) . "'>" . esc_html__('Delete all plugin data when uninstalling', 'webkew-wp-references-and-citations') . "</label>";
     }
 
     public function webkewrc_display_plugin_page()
