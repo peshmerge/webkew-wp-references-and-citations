@@ -42,8 +42,17 @@ class Webkewrc_References_Citations_Public
             wp_enqueue_style('webkew-wp-references-citations-public',
                 WEBKEWRC_REFERENCES_URL . 'public/css/webkew-wp-references-citations-public.css',
                 array(),
-                '1.0'
+                '1.0.0'
             );
+            wp_enqueue_script(
+                'webkew-wp-references-citations-public',
+                WEBKEWRC_REFERENCES_URL . 'public/js/dist/webkew-wp-references-citations-public.js',
+                array('jquery'),
+                '1.0.0',
+                true  // Load in footer
+            );
+            // By doing this we ensure the injection of the bibliography data happens before the loading of the script
+            add_action('wp_footer', array($this, 'inject_the_bibliography_data_in_the_footer'));
         }
     }
 
@@ -62,30 +71,31 @@ class Webkewrc_References_Citations_Public
             . '" class="webkewrc-bibliography"> <h2 class="webkewrc-bibliography_title">'
             . esc_html__('Bibliography', 'webkew-wp-references-and-citations') . '</h2></div>';
 
+        return $processed_content;
+    }
+
+    public function inject_the_bibliography_data_in_the_footer()
+    {
+        global $post;
+
+        if (!is_singular() || empty(get_post_meta(get_the_ID(), 'webkewrc_wp_references_field', true))) {
+            return;
+        }
+
         $data = array(
             'references' => $this->references,
             'usedReferences' => $this->used_references,
             'bibliographyStyle' => $this->bibliography_style,
             'postID' => $post->ID,
         );
+
         wp_add_inline_script('webkew-wp-references-citations-public',
             'window.webkewReferencesData = window.webkewReferencesData || {}; ' . "\n" .
             'window.webkewReferencesData[' . esc_js($post->ID) . '] = '
             . wp_json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ';',
             'before'
         );
-
-        wp_enqueue_script(
-            'webkew-wp-references-citations-public',
-            WEBKEWRC_REFERENCES_URL . 'public/js/dist/webkew-wp-references-citations-public.js',
-            array('jquery'),
-            '1.0',
-            true  // Load in footer
-        );
-
-        return $processed_content;
     }
-
 
     /**
      * This function searches the content of the loaded (custom) post / page for keywords \cite{KEY}. In addition,it

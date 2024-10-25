@@ -43,28 +43,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Process references for all posts
-    for (let postID in window.webkewReferencesData) {
-        processReferences(postID);
+    if (window.webkewReferencesData) {
+        // Process references for all posts
+        for (let postID in window.webkewReferencesData) {
+            processReferences(postID);
+        }
+        // Add this global click handler for citations
+        jQuery(document).on('click', '.webkew-citation', function (event) {
+            event.preventDefault();
+            var key = jQuery(this).data('key');
+            var bib_item_element = jQuery('#' + key);
+
+
+            // Scroll to the element with smooth animation
+            jQuery('html, body').animate({
+                scrollTop: bib_item_element.offset().top
+            }, 500); // 500 is the duration of the scroll (in milliseconds)
+
+
+            jQuery('.csl-entry').removeClass('webkew_highlight');
+            bib_item_element.addClass('webkew_highlight');
+            setTimeout(function () {
+                bib_item_element.removeClass('webkew_highlight');
+            }, 5000);
+        });
+    } else {
+        console.error("Couldn't find the webkewReferencesData on the current page!")
     }
-    // Add this global click handler for citations
-    jQuery(document).on('click', '.webkew-citation', function (event) {
-        event.preventDefault();
-        var key = jQuery(this).data('key');
-        var bib_item_element = jQuery('#' + key);
-
-
-        // Scroll to the element with smooth animation
-        jQuery('html, body').animate({
-            scrollTop: bib_item_element.offset().top
-        }, 500); // 500 is the duration of the scroll (in milliseconds)
-
-
-        jQuery('.csl-entry').removeClass('webkew_highlight');
-        bib_item_element.addClass('webkew_highlight');
-        setTimeout(function () {
-            bib_item_element.removeClass('webkew_highlight');
-        }, 5000);
-    });
 
 });

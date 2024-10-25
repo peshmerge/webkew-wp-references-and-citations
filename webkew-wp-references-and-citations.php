@@ -2,7 +2,7 @@
 /*
 Plugin Name: WebKew WP References and Citations
 Description: Insert and use citations inside WordPress (custom) posts and Pages similar to doing that in LateX.
-Version: 1.0.1
+Version: 1.0.2
 Text Domain: webkew-wp-references-and-citations
 Author: Peshmerge Morad
 License: GPLv3 or later
@@ -29,6 +29,25 @@ function webkewrc_references_init(): void
     $plugin = new Webkewrc_References_Citations();
     $plugin->run();
 }
+
+function webkewrc_references_activation()
+{
+    $default_webkewrc_references_citations_options = [
+        'webkewrc_post_types' => ['post' => 1],
+        'webkewrc_webkew_citation_style' => Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[0],
+        'webkewrc_bibliography_style' => Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES_LABELS[0],
+        'webkewrc_delete_data_on_uninstall' => 0,
+    ];
+    $existing_webkewrc_references_citations_options = get_option('webkewrc_references_citations_options', array());
+
+    update_option(
+        'webkewrc_references_citations_options',
+        array_merge($default_webkewrc_references_citations_options, $existing_webkewrc_references_citations_options)
+    );
+}
+
+// Register activation hook
+register_activation_hook(__FILE__, 'webkewrc_references_activation');
 
 webkewrc_references_init();
 
