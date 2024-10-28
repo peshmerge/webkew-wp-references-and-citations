@@ -148,7 +148,7 @@ class Webkewrc_References_Citations_Public
         $entry_pattern = "/@(\\w+){\\s*([^,]+),\\s*([\\s\\S]+?)}\\s*(?=@|$)/";
         // Regex patterns to extract author and year fields
         $author_pattern = "/author\\s*=\\s*{([^}]+)}/";
-        $year_pattern = "/year\\s*=\\s*{([^}]+)}/";
+        $year_pattern = "/year\\s*=\\s*{?([0-9]{4})}?/i";
 
         if (preg_match_all($entry_pattern, $this->references, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $match) {

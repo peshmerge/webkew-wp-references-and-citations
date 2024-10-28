@@ -5,7 +5,7 @@ Tags: references, citations, APA, bibliography, bibtex
 Donate link: https://buymeacoffee.com/peshmerge
 Requires at least: 5.5
 Tested up to: 6.6
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -36,9 +36,12 @@ Install the plugin from WordPress.org and start using it!
 
 == Changelog ==
 
+= 1.0.4 =
+* Fixed: Fixed year having spaces between the `=` and actual year value.
+
+
 = 1.0.3 =
 * Fixed: Some bibtex entries were skipped and not correctly displayed due a small typo in the regex.
-
 
 
 = 1.0.2 =
