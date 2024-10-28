@@ -2,7 +2,7 @@
 /*
 Plugin Name: WebKew WP References and Citations
 Description: Insert and use citations inside WordPress (custom) posts and Pages similar to doing that in LateX.
-Version: 1.0.2
+Version: 1.0.3
 Text Domain: webkew-wp-references-and-citations
 Author: Peshmerge Morad
 License: GPLv3 or later

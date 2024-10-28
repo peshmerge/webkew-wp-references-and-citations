@@ -145,23 +145,37 @@ class Webkewrc_References_Citations_Public
      */
     private function webkewrc_format_citation($key, $citations_count)
     {
-        if (preg_match(
-            '/@(\w+)\{' . preg_quote($key, '/') .
-            ',.*?author\s*=\s*(\{|\")([^"}]+)(\}|\").*?year\s*=\s*(\{|\")(\d+)(\}|\")/is', $this->references, $match)) {
-            $authors = explode(' and ', $match[3]);
-            $year = $match[6];
-            if (count($authors) > 1) {
-                $author = explode(',', $authors[0])[0] . ' et al.';
-            } else {
-                $author = explode(',', $authors[0])[0];
-            }
+        $entry_pattern = "/@(\\w+){\\s*([^,]+),\\s*([\\s\\S]+?)}\\s*(?=@|$)/";
+        // Regex patterns to extract author and year fields
+        $author_pattern = "/author\\s*=\\s*{([^}]+)}/";
+        $year_pattern = "/year\\s*=\\s*{([^}]+)}/";
 
-            if ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[0]) { // Author_year
-                return $this->return_citation_href_element($key, "{$author} {$year}");
-            } elseif ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[1]) { // Author
-                return $this->return_citation_href_element($key, $author);
-            } elseif ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[2]) { //numerical
-                return $this->return_citation_href_element($key, $citations_count);
+        if (preg_match_all($entry_pattern, $this->references, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $entry_key = trim($match[2]);
+                $fields = $match[3];
+                // Check if the current entry matches the search key
+                if ($entry_key === $key) {
+                    // Extract author and year
+                    preg_match($author_pattern, $fields, $author_match);
+                    preg_match($year_pattern, $fields, $year_match);
+                    $author = isset($author_match[1]) ? $author_match[1] : "N/A";
+
+                    $authors = explode(' and ', $author);
+                    if (count($authors) > 1) {
+                        $author = explode(',', $authors[0])[0] . ' et al.';
+                    } else {
+                        $author = explode(',', $authors[0])[0];
+                    }
+                    $year = isset($year_match[1]) ? $year_match[1] : "N/A";
+                    if ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[0]) { // Author_year
+                        return $this->return_citation_href_element($key, "{$author} {$year}");
+                    } elseif ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[1]) { // Author
+                        return $this->return_citation_href_element($key, $author);
+                    } elseif ($this->citation_style === Webkewrc_References_Citations_Admin::WEBKEWRC_CITATION_STYLES[2]) { //numerical
+                        return $this->return_citation_href_element($key, $citations_count);
+                    }
+                }
             }
         }
         return "\\cite{$key}";
